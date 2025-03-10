@@ -1,0 +1,26 @@
+name: Python Package Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build and deploy
+        run: python setup.py sdist bdist_wheel
+      - name: Upload to PyPI
+        uses: pypa/gh-action-pypi-deploy@v1
+        with:
+          username: ${{ secrets.PYPI_USERNAME }}
+          password: ${{ secrets.PYPI_PASSWORD }}
